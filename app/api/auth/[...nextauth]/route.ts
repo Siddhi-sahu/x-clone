@@ -1,9 +1,12 @@
-import NextAuth from "next-auth";
+import prisma from "@/lib/db";
+import NextAuth, { NextAuthOptions } from "next-auth";
+import Google from "next-auth/providers/google";
 import GoogleProvider from "next-auth/providers/google";
 
 
 
-const authOptions = {
+
+const authOptions: NextAuthOptions = {
     providers: [
 
         GoogleProvider({
@@ -12,6 +15,41 @@ const authOptions = {
         })
     ],
     //db entry
+    secret: process.env.NEXTAUTH_SECRET,
+
+    callbacks: {
+
+        async signIn({ user }) {
+            console.log(user)
+            if (!user.email) {
+                return false;
+            }
+            try {
+                const existingUser = await prisma.user.findUnique({
+                    where: {
+                        email: user.email
+                    }
+                });
+
+                if (!existingUser) {
+                    await prisma.user.create({
+                        data: {
+                            email: user.email,
+                            name: user.name ?? "",
+                            image: user.image ?? "",
+                            provider: "Google"
+                        }
+                    });
+                }
+
+            } catch (e) {
+                console.log(e);
+                return false;
+            }
+
+            return true;
+        }
+    }
 
 
 }
