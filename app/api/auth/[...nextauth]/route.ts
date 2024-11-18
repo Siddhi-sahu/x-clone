@@ -11,6 +11,7 @@ const authOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
         })
     ],
+    //db entry
 
 
 }
