@@ -1,12 +1,14 @@
 import prisma from "@/lib/db";
 import NextAuth, { NextAuthOptions } from "next-auth";
+import { getToken } from "next-auth/jwt";
 
 import GoogleProvider from "next-auth/providers/google";
+import { userAgent } from "next/server";
 
 
+//TODO:add custom userid in session
 
-
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
     providers: [
 
         GoogleProvider({
@@ -18,6 +20,7 @@ const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
 
     callbacks: {
+
 
         async signIn({ user }) {
             console.log(user)
@@ -48,6 +51,22 @@ const authOptions: NextAuthOptions = {
             }
 
             return true;
+        },
+
+        async session({ session, token }) {
+
+            if (session.user) {
+                session.user.id = parseInt(token.sub as string);
+            }
+
+            return session;
+
+        },
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id
+            }
+            return token;
         }
     }
 

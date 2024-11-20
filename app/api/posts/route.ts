@@ -1,6 +1,8 @@
 import prisma from "@/lib/db";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 //TODO: add image/etc
 //TODO: add likes
@@ -45,4 +47,24 @@ export async function POST(req: NextRequest) {
             status: 411
         })
     }
+}
+
+
+export async function GET(req: NextRequest) {
+
+    //not make session null
+    const session = await getServerSession(authOptions);
+    //code status
+    if (!session) {
+        return NextResponse.json({
+            mag: "Unauthenticated"
+        })
+    }
+
+    const posts = await prisma.post.findMany({
+        where: {
+            id: session?.user?.id,
+        }
+    })
+
 }
