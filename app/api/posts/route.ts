@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { authOptions } from "../auth/[...nextauth]/route";
+import next from "next";
 
 //TODO: add image/etc
 //TODO: add likes
@@ -52,19 +53,78 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
 
-    //not make session null
-    const session = await getServerSession(authOptions);
-    //code status
-    if (!session) {
+    const userId = req.nextUrl.searchParams.get("userId");
+    if (!userId) {
         return NextResponse.json({
-            mag: "Unauthenticated"
+            msg: "User id is required"
+        }, {
+            status: 400
         })
     }
+    try {
 
-    const posts = await prisma.post.findMany({
-        where: {
-            id: session?.user?.id,
-        }
-    })
+        const posts = await prisma.post.findMany({
+            where: {
+                userId: Number(userId),
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        });
+
+        return NextResponse.json({
+            posts
+        })
+    } catch (e) {
+        console.log(e);
+        return NextResponse.json({
+            msg: "error fetching user posts"
+        }, {
+            status: 411
+        })
+
+    }
+
 
 }
+//all posts
+// export async function GET(req: NextRequest) {
+
+//     //not make session null
+//     const session = await getServerSession(authOptions);
+//     //code status
+//     if (!session || !session?.user || !session?.user.id) {
+//         console.log("session: ", session, "session.user :", session?.user, "session.user.id: ", session?.user.id)
+//         return NextResponse.json({
+//             msg: "Unauthenticated"
+//         }, {
+//             status: 401
+//         })
+//     }
+//     try {
+
+//         const posts = await prisma.post.findMany({
+//             where: {
+//                 userId: session?.user?.id,
+//             },
+//             orderBy: {
+//                 createdAt: "desc"
+//             }
+//         });
+
+//         return NextResponse.json({
+//             posts
+//         })
+//     } catch (e) {
+//         console.log(e);
+//         return NextResponse.json({
+//             msg: "error fetching user posts"
+//         }, {
+//             status: 411
+//         })
+
+//     }
+
+
+// }
+
