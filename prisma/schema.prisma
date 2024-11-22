@@ -14,12 +14,13 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  name     String
-  image    String
-  provider Provider
-  posts    Post[]
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String
+  image      String
+  provider   Provider
+  providerId String   @unique
+  posts      Post[]
 }
 
 model Post {

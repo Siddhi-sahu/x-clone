@@ -1,15 +1,13 @@
 import prisma from "@/lib/db";
-import { getServerSession } from "next-auth";
+
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { authOptions } from "../auth/[...nextauth]/route";
-import next from "next";
 
 //TODO: add image/etc
 //TODO: add likes
 const createPostSchema = z.object({
     content: z.string(),
-    userId: z.number()
+    providerId: z.string()
 });
 export async function POST(req: NextRequest) {
     try {
@@ -24,12 +22,23 @@ export async function POST(req: NextRequest) {
         }
 
         const data = parseResult.data;
+        const providerId = data.providerId;
+        const user = await prisma.user.findUnique({
+            where: { providerId }
+        })
+        if (!user) {
+            return NextResponse.json({
+                msg: "No user with the providerId"
+            }, {
+                status: 404
+            })
+        }
 
         //create db entry
         const post = await prisma.post.create({
             data: {
                 content: data.content,
-                userId: data.userId
+                userId: user?.id
             }
         });
 

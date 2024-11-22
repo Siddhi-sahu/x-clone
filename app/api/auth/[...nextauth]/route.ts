@@ -1,9 +1,9 @@
 import prisma from "@/lib/db";
 import NextAuth, { NextAuthOptions } from "next-auth";
-import { getToken } from "next-auth/jwt";
+
 
 import GoogleProvider from "next-auth/providers/google";
-import { userAgent } from "next/server";
+
 
 
 //TODO:add custom userid in session
@@ -35,12 +35,16 @@ export const authOptions: NextAuthOptions = {
                 });
 
                 if (!existingUser) {
+                    //user object is by signIn contains the user's provider-specific ID (id in the user object) in this case this is google provider id
+                    const providerId = user.id;
+                    console.log("user id provided by google", providerId)
                     await prisma.user.create({
                         data: {
                             email: user.email,
                             name: user.name ?? "",
                             image: user.image ?? "",
-                            provider: "Google"
+                            provider: "Google",
+                            providerId,
                         }
                     });
                 }
@@ -52,23 +56,28 @@ export const authOptions: NextAuthOptions = {
 
             return true;
         },
+        async jwt({ token, user }) {
+            console.log("JWT Callback - Before:", token);
+            if (user) {
+                token.sub = user.id
+            }
+            console.log("JWT Callback - After:", token);
+            console.log(token.sub)
+            return token;
+        },
 
         async session({ session, token }) {
+            console.log("Session Callback - Token:", token);
+            console.log("Session Callback - Session:", session);
 
             if (session.user) {
-                session.user.id = parseInt(token.sub as string);
+                session.user.id = token.sub as string;
             }
 
             return session;
 
-        },
-        async jwt({ token, user }) {
-            if (user) {
-                token.sub = user.id
-            }
-            console.log(token.sub)
-            return token;
         }
+
     }
 
 

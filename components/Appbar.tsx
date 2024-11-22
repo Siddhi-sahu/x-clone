@@ -1,16 +1,18 @@
 "use client"
 
 import { signIn, signOut, useSession } from "next-auth/react"
-
+//logput and see if singin still works
 export function Appbar() {
-    const session = useSession()
+    const { data: session } = useSession()
     return <div>
-        <button onClick={() => {
+        {!session?.user && <button onClick={() => {
             signIn()
-        }}>Logout</button>
-        <button onClick={() => {
+        }}>signin</button>}
+
+        {session?.user && <button onClick={() => {
             signOut()
-        }}>Logout</button>
-        {JSON.stringify(session)}
+        }}>Logout</button>}
+
+        {/* {JSON.stringify(session)} */}
     </div>
 }

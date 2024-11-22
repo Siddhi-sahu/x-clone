@@ -24,35 +24,35 @@ export default function Header() {
 
                     </a>
 
-                    <a href="#" className="flex  md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex  md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <Home className="w-6 h-6" />
                         <span className="hidden md:block">Home</span>
                     </a>
-                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <Search className="w-6 h-6" />
                         <span className="hidden md:block">Explore</span>
                     </a>
-                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <Bell className="w-6 h-6" />
                         <span className="hidden md:block">Notifications</span>
                     </a>
-                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <Mail className="w-6 h-6" />
                         <span className="hidden md:block">Messages</span>
                     </a>
-                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <FileText className="w-6 h-6" />
                         <span className="hidden md:block">Grok</span>
                     </a>
-                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <Users className="w-6 h-6" />
                         <span className="hidden md:block">Communities</span>
                     </a>
-                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <Star className="w-6 h-6" />
                         <span className="hidden md:block">Premium</span>
                     </a>
-                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <User className="w-6 h-6" />
                         <span className="hidden md:block">Profile</span>
                     </a>
@@ -72,7 +72,7 @@ export default function Header() {
                             </a>
                         </div>
                     )} */}
-                    <a href="#" className="flex md:pl-8 font-bold items-center space-x-4 hover:text-blue-500">
+                    <a href="#" className="flex md:pl-8 font-bold items-center space-x-4 hover::text-slate-300">
                         <MoreHorizontal className="w-6 h-6" />
                         <span className="hidden md:block">More</span>
                     </a>
