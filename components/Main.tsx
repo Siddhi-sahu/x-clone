@@ -1,4 +1,4 @@
-import PostInput from "./Input";
+import PostInput from "./PostInput";
 
 export default function Main() {
 

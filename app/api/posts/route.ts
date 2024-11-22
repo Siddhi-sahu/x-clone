@@ -97,43 +97,4 @@ export async function GET(req: NextRequest) {
 
 }
 //all posts
-// export async function GET(req: NextRequest) {
-
-//     //not make session null
-//     const session = await getServerSession(authOptions);
-//     //code status
-//     if (!session || !session?.user || !session?.user.id) {
-//         console.log("session: ", session, "session.user :", session?.user, "session.user.id: ", session?.user.id)
-//         return NextResponse.json({
-//             msg: "Unauthenticated"
-//         }, {
-//             status: 401
-//         })
-//     }
-//     try {
-
-//         const posts = await prisma.post.findMany({
-//             where: {
-//                 userId: session?.user?.id,
-//             },
-//             orderBy: {
-//                 createdAt: "desc"
-//             }
-//         });
-
-//         return NextResponse.json({
-//             posts
-//         })
-//     } catch (e) {
-//         console.log(e);
-//         return NextResponse.json({
-//             msg: "error fetching user posts"
-//         }, {
-//             status: 411
-//         })
-
-//     }
-
-
-// }
 
