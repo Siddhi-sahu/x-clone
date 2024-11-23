@@ -7,6 +7,15 @@ export async function GET(req: NextRequest) {
         const posts = await prisma.post.findMany({
             orderBy: {
                 createdAt: "desc"
+            },
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                        email: true,
+                        image: true
+                    }
+                }
             }
         });
         return NextResponse.json({

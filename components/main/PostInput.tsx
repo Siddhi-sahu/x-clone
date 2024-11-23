@@ -11,6 +11,7 @@ export default function PostInput() {
     const [content, setContent] = useState("");
     const { data: session } = useSession();
     const providerId = session?.user.id;
+    const image = session?.user.image
 
 
     const handlePost = async () => {
@@ -39,9 +40,10 @@ export default function PostInput() {
         <div className="w-full max-w-2xl bg-black text-white border border-gray-700 rounded-lg">
             <div className="p-4">
                 <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-gray-600 flex-shrink-0">
-                        {/*  user avatar */}
-                    </div>
+                    {image ? <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
+                        <img src={image} alt={""} className="w-full h-full object-cover" />
+                    </div> : <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden"></div>}
+
                     <div className="flex-1">
                         <textarea
                             className="w-full bg-transparent text-white text-xl resize-none outline-none placeholder-gray-500"
