@@ -1,4 +1,5 @@
-import PostInput from "./PostInput";
+import PostBox from "./main/PostBox";
+import PostInput from "./main/PostInput";
 
 export default function Main() {
 
@@ -8,6 +9,7 @@ export default function Main() {
             {/* post input box */}
             <PostInput />
             {/* posts */}
+            <PostBox />
 
         </div>
         <div className="hidden lg:flex flex-col h-screen lg:col-span-4  bg-black">
