@@ -26,11 +26,11 @@ interface Post {
     userId: number;
 }
 export default function PostBox({
-    avatar = "/images/avatar.png",
+
     displayName = "me",
-    username = "@meate",
-    timestamp = "3h",
-    content = " founders is that they are way too good at organisation & time management.",
+    username = "@me",
+    // timestamp = "3h",
+    // content = " founders is that they are way too good at organisation & time management.",
     stats = {
         replies: 0,
         reposts: 0,
@@ -39,15 +39,44 @@ export default function PostBox({
     }
 }: PostProps) {
     const [allPosts, setAllPosts] = useState<Post[]>([]);
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        image: ""
+    })
     useEffect(() => {
-        getPosts()
+        getUser()
+        getPosts();
 
     }, []);
     async function getPosts() {
-        const res = await axios.get("/api/posts/all");
-        setAllPosts(res.data.posts);
-        console.log("res: ", res)
-        console.log("posts:", res.data.posts)
+        try {
+            const res = await axios.get("/api/posts/all");
+            setAllPosts(res.data.posts);
+
+        } catch (e) {
+            console.error(e)
+        }
+
+        // console.log("res: ", res)
+        // console.log("posts:", res.data.posts)
+    }
+    async function getUser() {
+        try {
+            const res = await axios.get("/api/user");
+            console.log("res: ", res.data.image)
+            setUser({
+                name: res.data.name,
+                email: res.data.email,
+                image: res.data.image
+            });
+
+        } catch (e) {
+            console.error(e);
+
+        }
+
+
     }
 
     return (
@@ -56,17 +85,17 @@ export default function PostBox({
                 <div className="flex gap-4">
                     {/* Avatar */}
                     <div className="flex-shrink-0">
-                        <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
-                            <img src={avatar} alt={displayName} className="w-full h-full object-cover" />
-                        </div>
+                        {(user.image) ? <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
+                            <img src={user.image} alt={displayName} className="w-full h-full object-cover" />
+                        </div> : <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden"></div>}
                     </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                         {/* Header */}
                         <div className="flex items-center gap-2 text-sm">
-                            <span className="font-bold text-white truncate">{displayName}</span>
-                            <span className="text-gray-500 truncate">{username}</span>
+                            <span className="font-bold text-white truncate">{user.name}</span>
+                            <span className="text-gray-500 truncate">{"@" + user.email}</span>
                             <span className="text-gray-500">·</span>
                             <span className="text-gray-500">{new Date(Post.createdAt).toLocaleString()}</span>
                         </div>
