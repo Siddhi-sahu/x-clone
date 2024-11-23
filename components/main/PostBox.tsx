@@ -27,10 +27,10 @@ interface Post {
 }
 export default function PostBox({
     avatar = "/images/avatar.png",
-    displayName = "Windows 7 girl",
-    username = "@aditimadz",
+    displayName = "me",
+    username = "@meate",
     timestamp = "3h",
-    content = "One thing I've realised while working with CXO's, founders is that they are way too good at organisation & time management.",
+    content = " founders is that they are way too good at organisation & time management.",
     stats = {
         replies: 0,
         reposts: 0,
@@ -77,41 +77,41 @@ export default function PostBox({
                         {/* Interaction Buttons */}
                         <div className="flex justify-between mt-3 max-w-md text-gray-500">
                             {/* <button className="group flex items-center gap-1 hover:text-blue-500">
-                            <div className="p-2 rounded-full group-hover:bg-blue-500/10">
-                            <MessageCircle size={18} />
-                            </div>
-                            <span className="text-sm">{stats.replies}</span>
+                                <div className="p-2 rounded-full group-hover:bg-blue-500/10">
+                                    <MessageCircle size={18} />
+                                </div>
+                                <span className="text-sm">{stats.replies}</span>
                             </button>
                             <button className="group flex items-center gap-1 hover:text-green-500">
-                            <div className="p-2 rounded-full group-hover:bg-green-500/10">
-                            <Repeat2 size={18} />
-                            </div>
-                            <span className="text-sm">{stats.reposts}</span>
-                            </button>
+                                <div className="p-2 rounded-full group-hover:bg-green-500/10">
+                                    <Repeat2 size={18} />
+                                </div>
+                                <span className="text-sm">{stats.reposts}</span>
+                            </button> */}
                             <button className="group flex items-center gap-1 hover:text-pink-500">
-                            <div className="p-2 rounded-full group-hover:bg-pink-500/10">
-                            <Heart size={18} />
-                            </div>
-                            <span className="text-sm">{stats.likes}</span>
+                                <div className="p-2 rounded-full group-hover:bg-pink-500/10">
+                                    <Heart size={18} />
+                                </div>
+                                <span className="text-sm">{stats.likes}</span>
                             </button>
-                            <button className="group flex items-center gap-1 hover:text-blue-500">
-                            <div className="p-2 rounded-full group-hover:bg-blue-500/10">
-                            <BarChart3 size={18} />
+                            {/* <button className="group flex items-center gap-1 hover:text-blue-500">
+                                <div className="p-2 rounded-full group-hover:bg-blue-500/10">
+                                    <BarChart3 size={18} />
+                                </div>
+                                <span className="text-sm">{stats.views}</span>
+                            </button> */}
+                            <div className="flex gap-3">
+                                <button className="group hover:text-blue-500">
+                                    <div className="p-2 rounded-full group-hover:bg-blue-500/10">
+                                        <Bookmark size={18} />
+                                    </div>
+                                </button>
+                                {/* <button className="group hover:text-blue-500">
+                                    <div className="p-2 rounded-full group-hover:bg-blue-500/10">
+                                        <Share size={18} />
+                                    </div>
+                                </button> */}
                             </div>
-                            <span className="text-sm">{stats.views}</span>
-                        </button>
-                        <div className="flex gap-3">
-                        <button className="group hover:text-blue-500">
-                        <div className="p-2 rounded-full group-hover:bg-blue-500/10">
-                        <Bookmark size={18} />
-                        </div>
-                            </button>
-                            <button className="group hover:text-blue-500">
-                            <div className="p-2 rounded-full group-hover:bg-blue-500/10">
-                            <Share size={18} />
-                            </div>
-                            </button>
-                            </div> */}
                         </div>
                     </div>
                 </div>
