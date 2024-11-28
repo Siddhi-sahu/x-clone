@@ -5,11 +5,13 @@
 import { Home, Search, Bell, Mail, FileText, Users, Star, User, MoreHorizontal } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image'
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Header() {
     const [showProfileMenu, setShowProfileMenu] = useState(false)
     const { data: session } = useSession();
+    const router = useRouter();
     if (!session) {
         return (
             <div className="flex h-screen bg-black items-center justify-center">
@@ -21,7 +23,11 @@ export default function Header() {
     const image = session.user.image;
     const name = session.user.name;
     const email = session.user.email;
-    // console.log("image:", image)
+    const userId = session.user.id;
+    console.log("id:", userId);
+
+
+    // const userId = 12;
 
     return (
         <div className="flex h-screen bg-black">
@@ -39,7 +45,7 @@ export default function Header() {
 
                     </a>
 
-                    <a href="#" className="flex  md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
+                    <a href="/home" className="flex  md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <Home className="w-6 h-6" />
                         <span className="hidden md:block">Home</span>
                     </a>
@@ -67,10 +73,13 @@ export default function Header() {
                         <Star className="w-6 h-6" />
                         <span className="hidden md:block">Premium</span>
                     </a>
-                    <a href="#" className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
+                    <button onClick={() => {
+                        router.push(`/profile/${userId}`)
+
+                    }} className="flex p-2 md:pl-8 font-bold items-center space-x-4 hover:text-slate-300">
                         <User className="w-6 h-6" />
                         <span className="hidden md:block">Profile</span>
-                    </a>
+                    </button>
 
 
                     <a href="#" className="flex md:pl-8 font-bold items-center space-x-4 hover::text-slate-300">

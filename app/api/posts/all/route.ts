@@ -1,7 +1,7 @@
 import prisma from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
 
         const posts = await prisma.post.findMany({
@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
             include: {
                 user: {
                     select: {
+
                         name: true,
                         email: true,
                         image: true
