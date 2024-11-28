@@ -62,8 +62,10 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
 
-    const userId = req.nextUrl.searchParams.get("userId");
-    if (!userId) {
+    const pathSegments = req.nextUrl.pathname.split("/");//array
+    const providerId = pathSegments[pathSegments.length - 1]
+
+    if (!providerId) {
         return NextResponse.json({
             msg: "User id is required"
         }, {
@@ -71,10 +73,25 @@ export async function GET(req: NextRequest) {
         })
     }
     try {
+        const user = await prisma.user.findUnique({
+            where: {
+                providerId,
+            }
+        });
+
+        if (!user) {
+            return NextResponse.json({
+                msg: "no user found"
+            }, {
+                status: 500
+            })
+
+        }
+        const userId = user.id;
 
         const posts = await prisma.post.findMany({
             where: {
-                userId: Number(userId),
+                userId: userId,
             },
             orderBy: {
                 createdAt: "desc"
@@ -89,7 +106,7 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({
             msg: "error fetching user posts"
         }, {
-            status: 411
+            status: 500
         })
 
     }
