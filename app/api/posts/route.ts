@@ -62,9 +62,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
 
-    const pathSegments = req.nextUrl.pathname.split("/");//array
-    const providerId = pathSegments[pathSegments.length - 1]
-
+    const providerId = req.nextUrl.searchParams.get("providerId");
     if (!providerId) {
         return NextResponse.json({
             msg: "User id is required"

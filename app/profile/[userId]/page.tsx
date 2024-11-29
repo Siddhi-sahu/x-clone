@@ -1,7 +1,11 @@
+"use client"
 import Header from "@/components/Header";
-import ProfileSection from "@/components/ProfileSection";
 
+import dynamic from "next/dynamic";
 
+const ProfileSection = dynamic(() => import("@/components/ProfileSection"), {
+    ssr: false
+})
 
 export default function Profile() {
     return <div >

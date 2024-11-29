@@ -4,31 +4,62 @@ import axios from 'axios';
 import { ArrowLeft, Calendar, BadgeCheck } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { useEffect } from 'react';
+import { useParams } from 'next/navigation';
+
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function ProfileSection() {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
+    const router = useRouter();
+    const params = useParams();
+    // const [loading, setLoading] = useState(true);
+    // const [posts, setPosts] = useState<any[]>([])
+
+
     if (!session) {
         <div className="flex h-screen bg-black items-center justify-center">
             <p className="text-white">You are not logged in. Please <a href="/api/auth/signin" className="text-blue-500">log in</a>.</p>
         </div>
     };
 
+    const userId = params?.userId;
     useEffect(() => {
-        GetPosts();
+        if (status == "unauthenticated") {
+            router.push("/api/auth/signin")
+        }
+    }, [status, router])
 
-    }, []);
-    async function GetPosts() {
+
+
+    useEffect(() => {
+        GetPosts(userId as string);
+    }, [userId]);
+
+
+    async function GetPosts(providerId: string) {
         try {
+            // setLoading(true)
 
-            const res = await axios.get("/api/posts");
-            console.log(res.data.posts)
+            const res = await axios.get(`/api/posts?providerId=${providerId}`);
+            console.log(res.data.posts || [])
         }
         catch (e) {
             console.error(e)
         }
+        // finally {
+        //     setLoading(false)
+        // }
 
     }
+
+    // if (status === "loading") {
+    //     return (
+    //         <div className="flex h-screen bg-black items-center justify-center">
+    //             <p className="text-white">Loading...</p>
+    //         </div>
+    //     );
+    // }
 
     const name = session?.user.name;
     const image = session?.user.image;
@@ -121,6 +152,9 @@ export default function ProfileSection() {
                 </div>
             </nav>
             {/* //show user posts */}
+            <div>
+
+            </div>
 
         </main>
     )
