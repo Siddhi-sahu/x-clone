@@ -93,6 +93,15 @@ export async function GET(req: NextRequest) {
             },
             orderBy: {
                 createdAt: "desc"
+            },
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                        email: true,
+                        image: true
+                    }
+                }
             }
         });
 
