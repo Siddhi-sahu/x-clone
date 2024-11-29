@@ -29,19 +29,21 @@ interface Post {
     userId: number;
     user: User
 }
-export default function PostBox({
+export default function PostBox(
+    // {
 
 
 
     // timestamp = "3h",
     // content = "they are way too good at organisation & time management.",
-    stats = {
-        replies: 0,
-        reposts: 0,
-        likes: 3,
-        views: 46
-    }
-}: PostProps) {
+    //     stats = {
+    //         replies: 0,
+    //         reposts: 0,
+    //         likes: 3,
+    //         views: 46
+    //     }
+    // }: PostProps
+) {
     //post ke user chaiye jisne post kia
     const [allPosts, setAllPosts] = useState<Post[]>([]);
     // const [user, setUser] = useState({
@@ -132,7 +134,7 @@ export default function PostBox({
                                 <div className="p-2 rounded-full group-hover:bg-pink-500/10">
                                     <Heart size={18} />
                                 </div>
-                                <span className="text-sm">{stats.likes}</span>
+                                <span className="text-sm">{2}</span>
                             </button>
                             {/* <button className="group flex items-center gap-1 hover:text-blue-500">
                                 <div className="p-2 rounded-full group-hover:bg-blue-500/10">

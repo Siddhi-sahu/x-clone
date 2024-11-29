@@ -9,17 +9,17 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-interface PostProps {
+// interface PostProps {
 
-    timestamp: string
-    content: string
-    stats: {
-        replies: number
-        reposts: number
-        likes: number
-        views: number
-    }
-}
+//     // timestamp: string
+//     content: string
+//     stats: {
+//         replies: number
+//         reposts: number
+//         likes: number
+//         views: number
+//     }
+// }
 
 interface User {
     name: string;
@@ -36,19 +36,21 @@ interface Post {
     user: User
 }
 
-export default function ProfileSection({
+export default function ProfileSection(
+    // {
 
 
 
     // timestamp = "3h",
     // content = "they are way too good at organisation & time management.",
-    stats = {
-        replies: 0,
-        reposts: 0,
-        likes: 3,
-        views: 46
-    }
-}: PostProps) {
+    // stats = {
+    //     replies: 0,
+    //     reposts: 0,
+    //     likes: 3,
+    //     views: 46
+    // }
+    // }: PostProps
+) {
     const { data: session, status } = useSession();
     const router = useRouter();
     const params = useParams();
@@ -229,7 +231,7 @@ export default function ProfileSection({
                                 <div className="p-2 rounded-full group-hover:bg-pink-500/10">
                                     <Heart size={18} />
                                 </div>
-                                <span className="text-sm">{stats.likes}</span>
+                                <span className="text-sm">{3}</span>
                             </button>
                             {/* <button className="group flex items-center gap-1 hover:text-blue-500">
             <div className="p-2 rounded-full group-hover:bg-blue-500/10">
