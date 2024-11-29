@@ -3,19 +3,20 @@
 
 import axios from 'axios'
 import { Heart, Bookmark, } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-interface PostProps {
+// interface PostProps {
 
-    timestamp: string
-    content: string
-    stats: {
-        replies: number
-        reposts: number
-        likes: number
-        views: number
-    }
-}
+//     timestamp: string
+//     content: string
+//     stats: {
+//         replies: number
+//         reposts: number
+//         likes: number
+//         views: number
+//     }
+// }
 interface User {
     name: string;
     email: string;
@@ -98,8 +99,11 @@ export default function PostBox(
                     {/* Avatar */}
                     <div className="flex-shrink-0">
                         {(Post.user.image) ? <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
+                            <Image src={Post.user.image} alt={""}
+                                className="w-full h-full object-cover"
+                                layout="responsive" width={100} height={100} />
 
-                            <img src={Post.user.image} alt={""} className="w-full h-full object-cover" />
+                            {/* <img src={Post.user.image} alt={""} className="w-full h-full object-cover" /> */}
                         </div> : <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden"></div>}
                     </div>
 

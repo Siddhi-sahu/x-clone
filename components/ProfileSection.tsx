@@ -8,6 +8,8 @@ import { useParams } from 'next/navigation';
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+
 
 // interface PostProps {
 
@@ -60,7 +62,7 @@ export default function ProfileSection(
 
     if (!session) {
         <div className="flex h-screen bg-black items-center justify-center">
-            <p className="text-white">You are not logged in. Please <a href="/api/auth/signin" className="text-blue-500">log in</a>.</p>
+            <p className="text-white">You are not logged in. Please <Link href="/api/auth/signin" className="text-blue-500">log in</Link>.</p>
         </div>
     };
 
@@ -125,11 +127,19 @@ export default function ProfileSection(
                 <div className="h-32 bg-gray-800"></div>
                 <div className="absolute -bottom-12 left-4">
                     <div className="w-24 h-24 rounded-full border-4 border-black bg-gray-600 overflow-hidden">
-                        <img
+                        <Image
                             src={image ?? "/images/avatar.png"}
                             alt="/images/avatar.png"
                             className="w-full h-full object-cover"
+                            layout="responsive"
+                            width={100}
+                            height={100}
                         />
+                        {/* <img
+                            src={image ?? "/images/avatar.png"}
+                            alt="/images/avatar.png"
+                            className="w-full h-full object-cover"
+                        /> */}
                     </div>
                 </div>
             </div>
@@ -196,7 +206,16 @@ export default function ProfileSection(
                     {/* Avatar */}
                     <div className="flex-shrink-0">
                         {(post.user.image) ? <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
-                            <img src={post.user.image} alt={""} className="w-full h-full object-cover" />
+                            <Image
+                                src={post.user.image}
+                                alt=""
+                                className="w-full h-full object-cover"
+                                layout="responsive"
+                                width={100}
+                                height={100}
+                            />
+
+                            {/* <img src={post.user.image} alt={""} className="w-full h-full object-cover" /> */}
                         </div> : <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden"></div>}
                     </div>
 

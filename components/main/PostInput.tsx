@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ImageIcon, FileTextIcon, SmileIcon, CalendarIcon, MapPinIcon } from 'lucide-react'
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 import axios from "axios";
 
@@ -41,7 +42,12 @@ export default function PostInput() {
             <div className="p-4">
                 <div className="flex gap-4">
                     {image ? <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
-                        <img src={image ?? "/images/avatar.png"} alt={"/images/avatar.png"} className="w-full h-full object-cover" />
+                        <Image src={image ?? "/images/avatar.png"} alt="/images/avatar.png"
+                            className="w-full h-full object-cover"
+                            layout="responsive"
+                            width={100}
+                            height={100} />
+                        {/* <img src={image ?? "/images/avatar.png"} alt={"/images/avatar.png"} className="w-full h-full object-cover" /> */}
                     </div> : <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden"></div>}
 
                     <div className="flex-1">
