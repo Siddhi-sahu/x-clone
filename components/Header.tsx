@@ -7,6 +7,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Link from 'next/link'
 
 export default function Header() {
     const [showProfileMenu, setShowProfileMenu] = useState(false)
@@ -15,7 +16,7 @@ export default function Header() {
     if (!session) {
         return (
             <div className="flex h-screen bg-black items-center justify-center">
-                <p className="text-white">You are not logged in. Please <a href="/api/auth/signin" className="text-blue-500">log in</a>.</p>
+                <p className="text-white">You are not logged in. Please <Link href="/api/auth/signin" className="text-blue-500">log in</Link>.</p>
             </div>
         );
 
@@ -101,10 +102,12 @@ export default function Header() {
                     >
                         <div className='flex pt-5  items-center'>
                             {image ? <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
-                                <img src={image} alt={""} className="w-full h-full object-cover" />
+                                <Image src={image} alt='' className='w-full h-full object-cover' layout="responsive" width={100} height={100} />
+
+                                {/* <img src={image} alt={""} className="w-full h-full object-cover" /> */}
                             </div> : <Image
                                 src="/images/avatar.png?height=40&width=40"
-                                alt="/images/avatar.png"
+                                alt=""
                                 width={40}
                                 height={40}
                                 className="rounded-full"
