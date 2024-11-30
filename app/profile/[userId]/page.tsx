@@ -17,7 +17,7 @@ export default function Profile() {
             <div className="grid col-span-7">
 
                 <div className="h-screen grid grid-cols-1 lg:grid-cols-10">
-                    <div className="flex flex-col  w-full lg:col-span-6 bg-black border-y-0 border-2 border-gray-500 border-solid overflow-y-auto scrollbar-none">
+                    <div className="flex flex-col  w-full lg:col-span-6 bg-black border-y-0 border-2 border-gray-700 border-solid overflow-y-auto scrollbar-none">
                         {/* the code of profile component starts from here */}
                         <ProfileSection />
 
