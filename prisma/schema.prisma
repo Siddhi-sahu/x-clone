@@ -1,9 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+//for api routes deployment "dataproxy"??
 generator client {
   provider   = "prisma-client-js"
   engineType = "dataproxy"
@@ -22,6 +17,7 @@ model User {
   provider   Provider
   providerId String   @unique
   posts      Post[]
+  likes      Like[]
 }
 
 model Post {
@@ -30,6 +26,17 @@ model Post {
   createdAt DateTime @default(now())
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+  likes     Like[]
+}
+
+model Like {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  postId Int
+  user   User @relation(fields: [userId], references: [id])
+  post   Post @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
 }
 
 enum Provider {

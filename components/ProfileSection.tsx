@@ -187,7 +187,7 @@ export default function ProfileSection(
             {/* Navigation Tabs */}
             <nav className="border-b border-gray-800">
                 <div className="flex">
-                    {["Posts", "Replies", "Highlights", "Articles", "Media", "Likes"].map((tab) => (
+                    {["Posts", "Likes"].map((tab) => (
                         <button
                             key={tab}
                             className={`px-4 py-4 hover:bg-gray-800/50 transition-colors relative ${tab === "Posts"

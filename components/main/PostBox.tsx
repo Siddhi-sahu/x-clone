@@ -1,4 +1,3 @@
-
 "use client"
 
 import axios from 'axios'
@@ -47,13 +46,9 @@ export default function PostBox(
 ) {
     //post ke user chaiye jisne post kia
     const [allPosts, setAllPosts] = useState<Post[]>([]);
-    // const [user, setUser] = useState({
-    //     name: "",
-    //     email: "",
-    //     image: ""
-    // })
+
     useEffect(() => {
-        // getUser()
+
         getPosts();
 
 
@@ -70,24 +65,7 @@ export default function PostBox(
         // console.log("res: ", res)
 
     }
-    // async function getUser() {
-    //     try {
-    //         const res = await axios.get("/api/user");
-    //         console.log("res: ", res.data.image)
-    //         setUser({
-    //             name: res.data.name,
-    //             email: res.data.email,
-    //             image: res.data.image
-    //         });
 
-    //     } catch (e) {
-    //         console.error(e);
-
-    //     }
-
-
-    // }
-    console.log("posts:", allPosts)
 
 
     return (
@@ -134,7 +112,15 @@ export default function PostBox(
                                 </div>
                                 <span className="text-sm">{stats.reposts}</span>
                             </button> */}
-                            <button className="group flex items-center gap-1 hover:text-pink-500">
+                            <button onClick={async () => {
+                                try {
+                                    console.log(Post.id)
+
+                                    await axios.post("/api/posts/likes", { postId: Post.id }, { withCredentials: true })
+                                } catch (e) {
+                                    console.log(e)
+                                }
+                            }} className="group flex items-center gap-1 hover:text-pink-500">
                                 <div className="p-2 rounded-full group-hover:bg-pink-500/10">
                                     <Heart size={18} />
                                 </div>

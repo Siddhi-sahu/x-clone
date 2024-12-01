@@ -1,5 +1,7 @@
 import prisma from "@/lib/db";
 
+
+
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -10,6 +12,7 @@ const createPostSchema = z.object({
     providerId: z.string()
 });
 export async function POST(req: NextRequest) {
+
     try {
         const parseResult = createPostSchema.safeParse(await req.json());
         if (!parseResult.success) {
