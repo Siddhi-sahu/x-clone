@@ -1,14 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { ImageIcon, FileTextIcon, SmileIcon, CalendarIcon, MapPinIcon } from 'lucide-react'
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 import axios from "axios";
 
+interface textAreaRefProps {
+    textAreaRef: React.RefObject<HTMLTextAreaElement>
+}
 
-export default function PostInput() {
+export default function PostInput({ textAreaRef }: textAreaRefProps) {
     const [content, setContent] = useState("");
     const { data: session } = useSession();
     const providerId = session?.user.id;
@@ -52,6 +55,7 @@ export default function PostInput() {
 
                     <div className="flex-1">
                         <textarea
+                            ref={textAreaRef}
                             className="w-full bg-transparent text-white text-xl resize-none outline-none placeholder-gray-500"
                             placeholder="What is happening?!"
                             rows={3}

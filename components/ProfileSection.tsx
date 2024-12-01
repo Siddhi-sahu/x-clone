@@ -86,7 +86,8 @@ export default function ProfileSection(
             setPosts(res.data.posts)
         }
         catch (e) {
-            console.error(e)
+            console.error(e);
+
         }
 
 

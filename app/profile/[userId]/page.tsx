@@ -8,6 +8,7 @@ const ProfileSection = dynamic(() => import("@/components/ProfileSection"), {
 })
 
 export default function Profile() {
+
     return <div >
         <div className="grid grid-cols-10">
             <div className="grid col-span-3">

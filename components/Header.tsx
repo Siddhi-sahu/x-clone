@@ -7,9 +7,13 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Link from 'next/link'
+import Link from 'next/link';
 
-export default function Header() {
+interface focusTextAreaProps {
+    focusTextArea?: () => void
+}
+
+export default function Header({ focusTextArea }: focusTextAreaProps) {
     const [showProfileMenu, setShowProfileMenu] = useState(false)
     const { data: session } = useSession();
     const router = useRouter();
@@ -95,7 +99,7 @@ export default function Header() {
                             </button>
                         </div>
                     )}
-                    <button className=" w-5/6 font-bold px-6 py-3 bg-blue-500 rounded-full text-white hover:bg-blue-600">
+                    <button onClick={focusTextArea} className=" w-5/6 font-bold px-6 py-3 bg-blue-500 rounded-full text-white hover:bg-blue-600">
                         Post
                     </button>
                     <button className="flex space-y-5  items-center space-x-4 mt-4 hover:text-slate-500" onClick={() => setShowProfileMenu(!showProfileMenu)}
