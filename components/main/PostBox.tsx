@@ -44,12 +44,15 @@ export default function PostBox(
     //     }
     // }: PostProps
 ) {
-    //post ke user chaiye jisne post kia
+
     const [allPosts, setAllPosts] = useState<Post[]>([]);
+    const [likedPosts, setLikedPosts] = useState<Record<number, boolean>>({});
+
 
     useEffect(() => {
 
         getPosts();
+
 
 
     }, []);
@@ -57,6 +60,13 @@ export default function PostBox(
         try {
             const res = await axios.get("/api/posts/all");
             setAllPosts(res.data.posts);
+            //initial state(of likes)
+            const initialLikes = res.data.posts.reduce((acc: Record<number, boolean>, post: Post) => {
+                acc[post.id] = false;
+                return acc;
+            });
+
+            setLikedPosts(initialLikes);
 
         } catch (e) {
             console.error(e)
@@ -64,6 +74,22 @@ export default function PostBox(
 
         // console.log("res: ", res)
 
+    };
+
+    const handleLikes = async (postId: number) => {
+        try {
+            console.log("postId", postId)
+
+            await axios.post("/api/posts/likes", { postId }, { withCredentials: true });
+
+            setLikedPosts((prevLikedState) => ({
+                ...prevLikedState,
+                [postId]: !prevLikedState[postId]
+            }))
+
+        } catch (e) {
+            console.log(e)
+        }
     }
 
 
@@ -112,19 +138,11 @@ export default function PostBox(
                                 </div>
                                 <span className="text-sm">{stats.reposts}</span>
                             </button> */}
-                            <button onClick={async () => {
-                                try {
-                                    console.log(Post.id)
-
-                                    await axios.post("/api/posts/likes", { postId: Post.id }, { withCredentials: true })
-                                } catch (e) {
-                                    console.log(e)
-                                }
-                            }} className="group flex items-center gap-1 hover:text-pink-500">
-                                <div className="p-2 rounded-full group-hover:bg-pink-500/10">
-                                    <Heart size={18} />
+                            <button onClick={() => handleLikes(Post.id)} className="group flex items-center gap-1 hover:text-pink-500">
+                                <div className={`p-2 rounded-full ${likedPosts[Post.id] ? "group-hover:bg-pink-500/10 text-pink-500" : "group-hover:bg-pink-500/10"} `}>
+                                    <Heart size={18} className={`${likedPosts[Post.id] ? "fill-current text-pink-500" : ""}`} />
                                 </div>
-                                <span className="text-sm">{2}</span>
+                                <span className="text-sm">{3}</span>
                             </button>
                             {/* <button className="group flex items-center gap-1 hover:text-blue-500">
                                 <div className="p-2 rounded-full group-hover:bg-blue-500/10">

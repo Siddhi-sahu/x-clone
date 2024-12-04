@@ -33,11 +33,10 @@ export async function POST(req: NextRequest) {
         console.log(body);
 
 
-        await prisma.like.create({
-            data: {
-                userId: user.id,
-                postId: data.postId
-            }
+        await prisma.like.upsert({
+            where: { userId_postId: { userId: user.id, postId: data.postId } },
+            create: { userId: user.id, postId: data.postId },
+            update: {}
         })
         return NextResponse.json({
             msg: "like created successfully"
@@ -62,7 +61,16 @@ export async function GET(req: NextRequest) {
     const body = await req.json();
     const data = LikesSchema.parse(body);
     await prisma.post.findUnique({
-        where: 
+        where: {
+            id: data.postId
+        },
+        include: {
+            _count: {
+                select: {
+                    likes: true
+                }
+            }
+        }
     })
 }
 
