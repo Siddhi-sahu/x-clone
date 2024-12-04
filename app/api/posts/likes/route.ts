@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
 
     try {
-        console.log("reached here")
+
         const session = await getServerSession(authOptions);
         console.log("Session:", session);
 
@@ -55,24 +55,56 @@ export async function POST(req: NextRequest) {
     }
 }
 
+//delellete requrts for like
+
+export async function DELETE(req: NextRequest) {
+    try {
+        const body = await req.json();
+
+        const { postId } = body;
+        if (!postId) {
+            return NextResponse.json({ msg: "postId is required" }, { status: 400 })
+        }
+
+        await prisma.like.deleteMany({
+            where: {
+                postId: postId
+            }
+        })
+
+        return NextResponse.json({ msg: "like deleted successfully" }, {
+            status: 200
+        })
+
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json({ msg: "Error while deleting likes" }, {
+            status: 500
+        })
+    }
+
+}
+
+
+
 //get request for like??
 
-export async function GET(req: NextRequest) {
-    const body = await req.json();
-    const data = LikesSchema.parse(body);
-    await prisma.post.findUnique({
-        where: {
-            id: data.postId
-        },
-        include: {
-            _count: {
-                select: {
-                    likes: true
-                }
-            }
-        }
-    })
-}
+// export async function GET(req: NextRequest) {
+//     const body = await req.json();
+//     const data = LikesSchema.parse(body);
+//     await prisma.post.findUnique({
+//         where: {
+//             id: data.postId
+//         },
+//         include: {
+//             _count: {
+//                 select: {
+//                     likes: true
+//                 }
+//             }
+//         }
+//     })
+// }
 
 
 

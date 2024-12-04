@@ -78,9 +78,15 @@ export default function PostBox(
 
     const handleLikes = async (postId: number) => {
         try {
-            console.log("postId", postId)
+            const alreadyLiked = likedPosts[postId];
+            if (alreadyLiked) {
+                await axios.delete("/api/posts/likes", { data: { postId } })
+            }
+            else {
 
-            await axios.post("/api/posts/likes", { postId }, { withCredentials: true });
+                await axios.post("/api/posts/likes", { postId }, { withCredentials: true });
+            }
+
 
             setLikedPosts((prevLikedState) => ({
                 ...prevLikedState,
