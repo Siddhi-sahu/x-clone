@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import { Heart, Bookmark, } from 'lucide-react'
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 
 // interface PostProps {
@@ -51,14 +51,7 @@ export default function PostBox(
     // const [likes, setlikes] = useState<number>(0)
 
 
-    useEffect(() => {
-
-        getPosts();
-
-
-
-    });
-    async function getPosts() {
+    const getPosts = useCallback(async () => {
         try {
             const res = await axios.get("/api/posts/all");
             const postsWithLikes = [];
@@ -81,8 +74,17 @@ export default function PostBox(
         }
 
         // console.log("res: ", res)
+    }, [])
+    useEffect(() => {
 
-    };
+        getPosts();
+
+
+
+    }, [getPosts]);
+
+
+
 
     const getLikesCount = async (postId: number) => {
         //hhere

@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import PostBox from './main/PostBox';
 
 
 // interface PostProps {
@@ -35,7 +36,10 @@ interface Post {
     content: string;
     createdAt: string;
     userId: number;
-    user: User
+    user: User;
+    _count: {
+        likes: number
+    }
 }
 
 export default function ProfileSection(
@@ -57,7 +61,8 @@ export default function ProfileSection(
     const router = useRouter();
     const params = useParams();
     // const [loading, setLoading] = useState(true);
-    const [posts, setPosts] = useState<Post[]>([])
+    const [posts, setPosts] = useState<Post[]>([]);
+    // const [likes, setLikes] = useState<number>(0);
 
 
     if (!session) {
@@ -92,7 +97,10 @@ export default function ProfileSection(
 
 
     }
-    console.log("posts:", posts);
+
+    const getLikesCount = async () => {
+
+    }
 
     // if (status === "loading") {
     //     return (
@@ -169,6 +177,7 @@ export default function ProfileSection(
 
                 <div className="flex items-center gap-2 mt-3 text-gray-500">
                     <Calendar size={16} />
+                    {/* add exact joining time */}
                     <span className="text-sm">Joined April 2024</span>
                 </div>
 
@@ -251,7 +260,7 @@ export default function ProfileSection(
                                 <div className="p-2 rounded-full group-hover:bg-pink-500/10">
                                     <Heart size={18} />
                                 </div>
-                                <span className="text-sm">{3}</span>
+                                <span className="text-sm">{post._count.likes}</span>
                             </button>
                             {/* <button className="group flex items-center gap-1 hover:text-blue-500">
             <div className="p-2 rounded-full group-hover:bg-blue-500/10">

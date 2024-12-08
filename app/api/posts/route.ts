@@ -104,8 +104,14 @@ export async function GET(req: NextRequest) {
                         email: true,
                         image: true
                     }
+                },
+                _count: {
+                    select: {
+                        likes: true
+                    }
                 }
             }
+
         });
 
         return NextResponse.json({
