@@ -57,7 +57,7 @@ export default function PostBox(
 
 
 
-    }, []);
+    });
     async function getPosts() {
         try {
             const res = await axios.get("/api/posts/all");
@@ -84,7 +84,7 @@ export default function PostBox(
 
     };
 
-    const getLikesCount = async (postId: Number) => {
+    const getLikesCount = async (postId: number) => {
         //hhere
         try {
             const res = await axios.get(`/api/posts/likes?postId=${postId}`)

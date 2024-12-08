@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/lib/auth";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse, userAgent } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const LikesSchema = z.object({
