@@ -27,7 +27,8 @@ interface Post {
     content: string;
     createdAt: string;
     userId: number;
-    user: User
+    user: User;
+    likes: number;
 }
 export default function PostBox(
     // {
@@ -47,6 +48,7 @@ export default function PostBox(
 
     const [allPosts, setAllPosts] = useState<Post[]>([]);
     const [likedPosts, setLikedPosts] = useState<Record<number, boolean>>({});
+    // const [likes, setlikes] = useState<number>(0)
 
 
     useEffect(() => {
@@ -59,14 +61,20 @@ export default function PostBox(
     async function getPosts() {
         try {
             const res = await axios.get("/api/posts/all");
-            setAllPosts(res.data.posts);
-            //initial state(of likes)
-            const initialLikes = res.data.posts.reduce((acc: Record<number, boolean>, post: Post) => {
-                acc[post.id] = false;
-                return acc;
-            });
+            const postsWithLikes = [];
+            const initialLikes: Record<number, boolean> = {}
+            for (const post of res.data.posts) {
+                const { likesCount, isLiked } = await getLikesCount(post.id);
+                postsWithLikes.push({ ...post, likes: likesCount });
+                initialLikes[post.id] = isLiked
+            }
 
+
+            setAllPosts(postsWithLikes);
+            //initial state(of likes)
             setLikedPosts(initialLikes);
+            //initiallikew={1: true, 2: false}
+
 
         } catch (e) {
             console.error(e)
@@ -75,6 +83,24 @@ export default function PostBox(
         // console.log("res: ", res)
 
     };
+
+    const getLikesCount = async (postId: Number) => {
+        //hhere
+        try {
+            const res = await axios.get(`/api/posts/likes?postId=${postId}`)
+            return {
+                likesCount: res.data.likes,
+                isLiked: res.data.isCurrentlyLiked
+            };
+
+        } catch (e) {
+            console.error(e);
+            return {
+                likesCount: 0,
+                isLiked: false
+            };
+        }
+    }
 
     const handleLikes = async (postId: number) => {
         try {
@@ -91,7 +117,10 @@ export default function PostBox(
             setLikedPosts((prevLikedState) => ({
                 ...prevLikedState,
                 [postId]: !prevLikedState[postId]
-            }))
+            }));
+
+            setAllPosts((prevPosts) =>
+                prevPosts.map((post) => post.id === postId ? { ...post, likes: alreadyLiked ? post.likes - 1 : post.likes + 1 } : post))
 
         } catch (e) {
             console.log(e)
@@ -148,7 +177,7 @@ export default function PostBox(
                                 <div className={`p-2 rounded-full ${likedPosts[Post.id] ? "group-hover:bg-pink-500/10 text-pink-500" : "group-hover:bg-pink-500/10"} `}>
                                     <Heart size={18} className={`${likedPosts[Post.id] ? "fill-current text-pink-500" : ""}`} />
                                 </div>
-                                <span className="text-sm">{3}</span>
+                                <span className="text-sm">{Post.likes}</span>
                             </button>
                             {/* <button className="group flex items-center gap-1 hover:text-blue-500">
                                 <div className="p-2 rounded-full group-hover:bg-blue-500/10">

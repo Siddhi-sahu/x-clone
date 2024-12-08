@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/lib/auth";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, userAgent } from "next/server";
 import { z } from "zod";
 
 const LikesSchema = z.object({
@@ -89,22 +89,66 @@ export async function DELETE(req: NextRequest) {
 
 //get request for like??
 
-// export async function GET(req: NextRequest) {
-//     const body = await req.json();
-//     const data = LikesSchema.parse(body);
-//     await prisma.post.findUnique({
-//         where: {
-//             id: data.postId
-//         },
-//         include: {
-//             _count: {
-//                 select: {
-//                     likes: true
-//                 }
-//             }
-//         }
-//     })
-// }
+export async function GET(req: NextRequest) {
+    try {
+
+        const url = new URL(req.url);
+        const postId = url.searchParams.get("postId");
+        if (!postId) {
+            return NextResponse.json({ msg: "post id is veryyyyyy required bitch" }, { status: 411 })
+        };
+
+        const session = await getServerSession(authOptions);
+        if (!session || !session.user) {
+            return NextResponse.json({
+                msg: "Unauthorized"
+            }, {
+                status: 401
+            })
+        };
+
+        const user = await prisma.user.findUnique({
+            where: {
+                providerId: session.user.id
+            }
+        })
+        const post = await prisma.post.findUnique({
+            where: {
+                id: Number(postId)
+            },
+            include: {
+                likes: true,
+                _count: {
+                    select: {
+                        likes: true
+                    }
+                }
+            }
+        });
+
+        if (!post) {
+            return NextResponse.json({ msg: "No post found" }, {
+                status: 404
+            })
+        }
+        //agar ek bhi match hua toh .some will return true else sare na match hone par false
+
+        const isCurrentlyLiked = post.likes.some((like) => like.userId === user?.id);
+
+        return NextResponse.json(
+            {
+                likes: post._count.likes,
+                isCurrentlyLiked
+            }, {
+            status: 200
+        })
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json({ msg: "error while fetching counts" }, {
+            status: 500
+        })
+    }
+}
 
 
 
