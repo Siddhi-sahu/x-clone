@@ -100,9 +100,11 @@ export async function GET(req: NextRequest) {
             include: {
                 user: {
                     select: {
+
+                        providerId: true,
                         name: true,
                         email: true,
-                        image: true
+                        image: true,
                     }
                 },
                 _count: {

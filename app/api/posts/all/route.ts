@@ -11,7 +11,8 @@ export async function GET() {
             include: {
                 user: {
                     select: {
-
+                        id: true,
+                        providerId: true,
                         name: true,
                         email: true,
                         image: true

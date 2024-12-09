@@ -1,10 +1,9 @@
 "use client"
 
 import axios from 'axios'
-import { Heart, Bookmark, } from 'lucide-react'
+import { Heart, Bookmark } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
-
 // interface PostProps {
 
 //     timestamp: string
@@ -17,6 +16,7 @@ import Image from 'next/image';
 //     }
 // }
 interface User {
+    providerId: string;
     name: string;
     email: string;
     image: string | null;
@@ -30,25 +30,11 @@ interface Post {
     user: User;
     likes: number;
 }
-export default function PostBox(
-    // {
-
-
-
-    // timestamp = "3h",
-    // content = "they are way too good at organisation & time management.",
-    //     stats = {
-    //         replies: 0,
-    //         reposts: 0,
-    //         likes: 3,
-    //         views: 46
-    //     }
-    // }: PostProps
-) {
+export default function PostBox() {
 
     const [allPosts, setAllPosts] = useState<Post[]>([]);
     const [likedPosts, setLikedPosts] = useState<Record<number, boolean>>({});
-    // const [likes, setlikes] = useState<number>(0)
+
 
 
     const getPosts = useCallback(async () => {
@@ -127,7 +113,8 @@ export default function PostBox(
         } catch (e) {
             console.log(e)
         }
-    }
+    };
+
 
 
 
@@ -138,15 +125,27 @@ export default function PostBox(
                 <div className="flex gap-4">
 
                     {/* Avatar */}
-                    <div className="flex-shrink-0">
-                        {(Post.user.image) ? <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
-                            <Image src={Post.user.image} alt={""}
-                                className="w-full h-full object-cover"
-                                layout="responsive" width={100} height={100} />
 
-                            {/* <img src={Post.user.image} alt={""} className="w-full h-full object-cover" /> */}
-                        </div> : <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden"></div>}
+                    <div className="flex-shrink-0">
+                        {/* user id with */}
+                        <a href={Post.user.providerId ? `/user/profile/${Post.user.providerId}` : "#"} onClick={(e) => {
+                            if (!Post.user.providerId) {
+                                e.preventDefault();
+                                console.log("provider id is missing for this user", Post.user)
+                            }
+                        }}>
+
+                            {(Post.user.image) ? <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden">
+                                <Image src={Post.user.image} alt={""}
+                                    className="w-full h-full object-cover"
+                                    layout="responsive" width={100} height={100} />
+
+                                {/* <img src={Post.user.image} alt={""} className="w-full h-full object-cover" /> */}
+                            </div> : <div className="w-10 h-10 rounded-full bg-gray-600 overflow-hidden"></div>}
+                        </a>
+
                     </div>
+
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">

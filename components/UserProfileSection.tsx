@@ -42,7 +42,7 @@ interface Post {
     }
 }
 
-export default function ProfileSection(
+export default function UsersProfileSection(
     // {
 
 
@@ -62,7 +62,7 @@ export default function ProfileSection(
     const params = useParams();
     // const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
-    // const [likes, setLikes] = useState<number>(0);
+    const [user, setUser] = useState<User | null>(null)
 
 
     if (!session) {
@@ -71,7 +71,8 @@ export default function ProfileSection(
         </div>
     };
 
-    const userId = params?.userId;
+    const userId = params?.userid;
+    console.log("providerId should be", userId);
     useEffect(() => {
         if (status == "unauthenticated") {
             router.push("/api/auth/signin")
@@ -81,9 +82,25 @@ export default function ProfileSection(
 
 
     useEffect(() => {
-        GetPosts(userId as string);
+        if (userId) {
+
+            GetPosts(userId as string);
+            getUserDetails(userId as string);
+        }
     }, [userId]);
 
+    async function getUserDetails(providerId: string) {
+        try {
+            const res = await axios.get(`/api/user?providerId=${providerId}`);
+            setUser(res.data.user);
+            console.log("res error", res.data)
+
+        } catch (e) {
+            console.error(e);
+
+        }
+
+    }
 
     async function GetPosts(providerId: string) {
         try {
@@ -97,12 +114,9 @@ export default function ProfileSection(
 
 
     }
+    console.log(posts)
 
 
-
-    const name = session?.user.name;
-    const image = session?.user.image;
-    const email = session?.user.email;
     return (
         <main className="min-h-screen bg-black text-white">
             {/* Header */}
@@ -115,7 +129,7 @@ export default function ProfileSection(
                         <ArrowLeft size={20} />
                     </Link>
                     <div>
-                        <h1 className="font-bold text-xl">{name}</h1>
+                        <h1 className="font-bold text-xl">{user?.name}</h1>
                         <p className="text-gray-500 text-sm">{posts.length} posts</p>
                     </div>
                 </div>
@@ -127,7 +141,7 @@ export default function ProfileSection(
                 <div className="absolute -bottom-12 left-4">
                     <div className="w-24 h-24 rounded-full border-4 border-black bg-gray-600 overflow-hidden">
                         <Image
-                            src={image ?? "/images/avatar.png"}
+                            src={user?.image ?? "/images/avatar.png"}
                             alt="/images/avatar.png"
                             className="w-full h-full object-cover"
                             layout="responsive"
@@ -145,21 +159,21 @@ export default function ProfileSection(
 
             {/* Profile Actions */}
             <div className="flex justify-end px-4 py-3">
-                <button className="px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
-                    Edit profile
+                <button className="bg-blue-500 px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
+                    Follow
                 </button>
             </div>
 
             {/* Profile Info */}
             <div className="px-4 mb-4">
                 <div className="flex items-center gap-2">
-                    <h2 className="font-bold text-xl">{name}</h2>
+                    <h2 className="font-bold text-xl">{user?.name}</h2>
                     <button className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-500 text-sm font-bold hover:bg-blue-600 transition-colors">
                         <BadgeCheck size={16} />
                         Get verified
                     </button>
                 </div>
-                <p className="text-gray-500">@{email}</p>
+                <p className="text-gray-500">@{user?.email}</p>
                 {/* their details */}
                 <p className="text-gray-500 mt-1"></p>
                 <p className="mt-3"></p>

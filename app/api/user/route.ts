@@ -1,20 +1,51 @@
 //send user details
 
-import { authOptions } from "@/app/lib/auth";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import prisma from "@/lib/db";
+import { NextRequest, NextResponse } from "next/server";
 
 
-export async function GET() {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
+export async function GET(req: NextRequest) {
+    const providerId = req.nextUrl.searchParams.get("providerId");
+
+    if (!providerId) {
         return NextResponse.json({
-            msg: "user not found"
+            msgg: "providerId is required"
         }, {
-            status: 404
+            status: 411
         })
+    };
+
+    try {
+
+
+        const user = await prisma.user.findUnique({
+            where: {
+                providerId,
+            },
+            select: {
+                providerId: true,
+                name: true,
+                image: true,
+                email: true
+            }
+        });
+
+        if (!user) {
+            return NextResponse.json({
+                msg: "user not founndd"
+            }, {
+                status: 404
+            })
+        };
+
+        return NextResponse.json({
+            user
+
+        })
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json({ msg: "main error" }, { status: 500 });
     }
 
-    return NextResponse.json(session?.user)
 
 }
