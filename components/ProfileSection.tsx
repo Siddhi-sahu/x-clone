@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import PostBox from './main/PostBox';
+// import PostBox from './main/PostBox';
 
 
 // interface PostProps {
@@ -98,9 +98,9 @@ export default function ProfileSection(
 
     }
 
-    const getLikesCount = async () => {
+    // const getLikesCount = async () => {
 
-    }
+    // }
 
     // if (status === "loading") {
     //     return (
