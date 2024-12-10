@@ -4,17 +4,7 @@ import axios from 'axios'
 import { Heart, Bookmark } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
-// interface PostProps {
-
-//     timestamp: string
-//     content: string
-//     stats: {
-//         replies: number
-//         reposts: number
-//         likes: number
-//         views: number
-//     }
-// }
+import { format } from 'date-fns';
 interface User {
     providerId: string;
     name: string;
@@ -161,7 +151,7 @@ export default function PostBox() {
                                 <span className="font-bold text-white truncate">{Post.user.name}</span>
                                 <span className="text-gray-500 truncate">{"@" + Post.user.email}</span>
                                 <span className="text-gray-500">·</span>
-                                <span className="text-gray-500">{new Date(Post.createdAt).toLocaleString()}</span>
+                                <span className="text-gray-500">{format(new Date(Post.createdAt), "dd MMM yyyy")}</span>
                             </div>
                         </a>
 

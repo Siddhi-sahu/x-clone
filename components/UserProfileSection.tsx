@@ -9,25 +9,12 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-// import PostBox from './main/PostBox';
-
-
-// interface PostProps {
-
-//     // timestamp: string
-//     content: string
-//     stats: {
-//         replies: number
-//         reposts: number
-//         likes: number
-//         views: number
-//     }
-// }
-
+import { format } from 'date-fns';
 interface User {
     name: string;
     email: string;
     image: string | null;
+    createdAt: string;
 
 }
 
@@ -93,7 +80,7 @@ export default function UsersProfileSection(
         try {
             const res = await axios.get(`/api/user?providerId=${providerId}`);
             setUser(res.data.user);
-            console.log("res error", res.data)
+
 
         } catch (e) {
             console.error(e);
@@ -182,7 +169,7 @@ export default function UsersProfileSection(
                 <div className="flex items-center gap-2 mt-3 text-gray-500">
                     <Calendar size={16} />
                     {/* add exact joining time */}
-                    <span className="text-sm">Joined April 2024</span>
+                    <span className="text-sm">Joined {user?.createdAt ? format(new Date(user.createdAt), "MMMM yyyy") : "2024"}</span>
                 </div>
 
                 <div className="flex gap-4 mt-3">

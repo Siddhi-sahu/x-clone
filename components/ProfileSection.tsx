@@ -157,7 +157,7 @@ export default function ProfileSection() {
                 <div className="flex items-center gap-2 mt-3 text-gray-500">
                     <Calendar size={16} />
                     {/* add exact joining time */}
-                    <span className="text-sm"> Joined {user?.createdAt ? format(new Date(user.createdAt), "MMM yyyy") : "2024"}</span>
+                    <span className="text-sm"> Joined {user?.createdAt ? format(new Date(user.createdAt), "MMMM yyyy") : "2024"}</span>
                 </div>
 
                 <div className="flex gap-4 mt-3">
