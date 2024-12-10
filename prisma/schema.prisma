@@ -16,6 +16,7 @@ model User {
   image      String
   provider   Provider
   providerId String   @unique
+  createdAt  DateTime @default(now())
   posts      Post[]
   likes      Like[]
 }

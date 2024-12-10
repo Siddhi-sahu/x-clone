@@ -150,12 +150,20 @@ export default function PostBox() {
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                         {/* Header */}
-                        <div className="flex items-center gap-2 text-sm">
-                            <span className="font-bold text-white truncate">{Post.user.name}</span>
-                            <span className="text-gray-500 truncate">{"@" + Post.user.email}</span>
-                            <span className="text-gray-500">·</span>
-                            <span className="text-gray-500">{new Date(Post.createdAt).toLocaleString()}</span>
-                        </div>
+                        <a href={Post.user.providerId ? `/user/profile/${Post.user.providerId}` : "#"} onClick={(e) => {
+                            if (!Post.user.providerId) {
+                                e.preventDefault();
+                                console.log("provider id is missing for this user", Post.user);
+                            }
+                        }}>
+                            <div className="flex items-center gap-2 text-sm">
+
+                                <span className="font-bold text-white truncate">{Post.user.name}</span>
+                                <span className="text-gray-500 truncate">{"@" + Post.user.email}</span>
+                                <span className="text-gray-500">·</span>
+                                <span className="text-gray-500">{new Date(Post.createdAt).toLocaleString()}</span>
+                            </div>
+                        </a>
 
                         {/* Post Text */}
                         <p className="text-white mt-1 whitespace-pre-wrap break-words">{Post.content}</p>

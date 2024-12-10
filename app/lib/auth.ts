@@ -45,6 +45,7 @@ export const authOptions: AuthOptions = {
                             image: user.image ?? "",
                             provider: "Google",
                             providerId,
+
                         }
                     });
                 }
@@ -59,10 +60,12 @@ export const authOptions: AuthOptions = {
         async jwt({ token, user }) {
             // console.log("JWT Callback - Before:", token);
             if (user) {
+                //user is from google(etc) provider; Only present during initial login or when fetching user info
                 token.sub = user.id
+                // console.log("user: ", user)
             }
             // console.log("JWT Callback - After:", token);
-            console.log(token.sub)
+            console.log("token.sub", token.sub)
             return token;
         },
 

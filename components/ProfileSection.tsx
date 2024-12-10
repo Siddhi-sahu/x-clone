@@ -9,25 +9,14 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-// import PostBox from './main/PostBox';
+import { format } from 'date-fns';
 
-
-// interface PostProps {
-
-//     // timestamp: string
-//     content: string
-//     stats: {
-//         replies: number
-//         reposts: number
-//         likes: number
-//         views: number
-//     }
-// }
 
 interface User {
     name: string;
     email: string;
     image: string | null;
+    createdAt: string;
 
 }
 
@@ -42,27 +31,13 @@ interface Post {
     }
 }
 
-export default function ProfileSection(
-    // {
-
-
-
-    // timestamp = "3h",
-    // content = "they are way too good at organisation & time management.",
-    // stats = {
-    //     replies: 0,
-    //     reposts: 0,
-    //     likes: 3,
-    //     views: 46
-    // }
-    // }: PostProps
-) {
+export default function ProfileSection() {
     const { data: session, status } = useSession();
     const router = useRouter();
     const params = useParams();
     // const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
-    // const [likes, setLikes] = useState<number>(0);
+    const [user, setUser] = useState<User | null>(null);
 
 
     if (!session) {
@@ -82,6 +57,7 @@ export default function ProfileSection(
 
     useEffect(() => {
         GetPosts(userId as string);
+        getTime(userId as string);
     }, [userId]);
 
 
@@ -95,6 +71,19 @@ export default function ProfileSection(
 
         }
 
+
+    };
+    async function getTime(providerId: string) {
+        try {
+            const res = await axios.get(`/api/user?providerId=${providerId}`);
+
+            setUser(res.data.user);
+            console.log("User data from API:", res.data);
+
+        }
+        catch (e) {
+            console.error(e)
+        }
 
     }
 
@@ -168,7 +157,7 @@ export default function ProfileSection(
                 <div className="flex items-center gap-2 mt-3 text-gray-500">
                     <Calendar size={16} />
                     {/* add exact joining time */}
-                    <span className="text-sm">Joined April 2024</span>
+                    <span className="text-sm"> Joined {user?.createdAt ? format(new Date(user.createdAt), "MMM yyyy") : "2024"}</span>
                 </div>
 
                 <div className="flex gap-4 mt-3">
@@ -226,7 +215,7 @@ export default function ProfileSection(
                             <span className="font-bold text-white truncate">{post.user.name}</span>
                             <span className="text-gray-500 truncate">{"@" + post.user.email}</span>
                             <span className="text-gray-500">·</span>
-                            <span className="text-gray-500">{new Date(post.createdAt).toLocaleString()}</span>
+                            <span className="text-gray-500">{format(new Date(post.createdAt), "dd MMM yyyy")}</span>
                         </div>
 
                         {/* Post Text */}

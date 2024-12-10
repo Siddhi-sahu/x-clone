@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export async function GET(req: NextRequest) {
-    const providerId = req.nextUrl.searchParams.get("providerId");
+    const providerId = req.nextUrl.searchParams.get("providerId")?.trim();
 
     if (!providerId) {
         return NextResponse.json({
@@ -26,9 +26,12 @@ export async function GET(req: NextRequest) {
                 providerId: true,
                 name: true,
                 image: true,
-                email: true
+                email: true,
+                createdAt: true
+
             }
         });
+        console.log("Fetched user from DB:", user);
 
         if (!user) {
             return NextResponse.json({
@@ -38,8 +41,14 @@ export async function GET(req: NextRequest) {
             })
         };
 
+
+
         return NextResponse.json({
-            user
+            user: {
+                ...user,
+                createdAt: user.createdAt.toISOString()
+            }
+
 
         })
     } catch (e) {
