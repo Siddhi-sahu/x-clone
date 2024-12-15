@@ -29,27 +29,14 @@ interface Post {
     }
 }
 
-export default function UsersProfileSection(
-    // {
-
-
-
-    // timestamp = "3h",
-    // content = "they are way too good at organisation & time management.",
-    // stats = {
-    //     replies: 0,
-    //     reposts: 0,
-    //     likes: 3,
-    //     views: 46
-    // }
-    // }: PostProps
-) {
+export default function UsersProfileSection() {
     const { data: session, status } = useSession();
     const router = useRouter();
     const params = useParams();
     // const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
-    const [user, setUser] = useState<User | null>(null)
+    const [user, setUser] = useState<User | null>(null);
+    const [isFollowing, setIsFollowing] = useState(false);
 
 
     if (!session) {
@@ -59,6 +46,7 @@ export default function UsersProfileSection(
     };
 
     const userId = params?.userid;
+    const sessionId = session?.user.id;
 
     useEffect(() => {
         if (status == "unauthenticated") {
@@ -99,6 +87,18 @@ export default function UsersProfileSection(
         catch (e) {
             console.error(e);
 
+        }
+
+
+    }
+
+    const handleFollow = async () => {
+        try {
+            await axios.post(`/api/follows?followerId=${sessionId}&followingId=${userId}`);
+            setIsFollowing(true);
+
+        } catch (e) {
+            console.log("error here in follow:", e)
         }
 
 
@@ -148,10 +148,10 @@ export default function UsersProfileSection(
 
             {/* Profile Actions */}
             <div className="flex justify-end px-4 py-3">
-                {session?.user.id === userId ? <button className="px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
+                {sessionId === userId ? <button className="px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
                     Edit profile
-                </button> : <button className="bg-blue-500 px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
-                    Follow
+                </button> : <button onClick={handleFollow} className={`px-4 py-1.5 rounded-full border ${isFollowing ? "bg-gray-700 text-gray-200 border-gray-400" : "bg-blue-500 text-white border-gray-400 hover:bg-gray-900"} font-bold transition-colors`}>
+                    {isFollowing ? "Following" : "Follow"}
                 </button>}
 
             </div>
