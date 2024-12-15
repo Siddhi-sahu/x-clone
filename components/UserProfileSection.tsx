@@ -59,12 +59,14 @@ export default function UsersProfileSection(
     };
 
     const userId = params?.userid;
-    console.log("providerId should be", userId);
+
     useEffect(() => {
         if (status == "unauthenticated") {
             router.push("/api/auth/signin")
         }
-    }, [status, router])
+    }, [status, router]);
+
+
 
 
 
@@ -101,7 +103,7 @@ export default function UsersProfileSection(
 
 
     }
-    console.log(posts)
+
 
 
     return (
@@ -146,9 +148,12 @@ export default function UsersProfileSection(
 
             {/* Profile Actions */}
             <div className="flex justify-end px-4 py-3">
-                <button className="bg-blue-500 px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
+                {session?.user.id === userId ? <button className="px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
+                    Edit profile
+                </button> : <button className="bg-blue-500 px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
                     Follow
-                </button>
+                </button>}
+
             </div>
 
             {/* Profile Info */}
