@@ -10,15 +10,17 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
   name       String
   image      String
   provider   Provider
-  providerId String   @unique
-  createdAt  DateTime @default(now())
+  providerId String    @unique
+  createdAt  DateTime  @default(now())
   posts      Post[]
   likes      Like[]
+  following  Follows[] @relation("follower")
+  followers  Follows[] @relation("following")
 }
 
 model Post {
@@ -39,6 +41,15 @@ model Like {
   post      Post     @relation(fields: [postId], references: [id])
 
   @@unique([userId, postId])
+}
+
+model Follows {
+  followerId  String
+  follower    User   @relation("follower", fields: [followerId], references: [providerId])
+  followingId String
+  following   User   @relation("following", fields: [followingId], references: [providerId])
+
+  @@unique([followerId, followingId])
 }
 
 enum Provider {
