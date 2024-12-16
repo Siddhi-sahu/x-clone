@@ -35,7 +35,9 @@ export async function GET(req: NextRequest) {
             }
         })
 
-        return NextResponse.json({ isFollowing: !!isFollowing, followerCount: followerCount })
+        return NextResponse.json({ isFollowing: !!isFollowing, followerCount: followerCount }, {
+            status: 200
+        })
     } catch (e) {
         console.log("error in get function of follows", e);
         return NextResponse.json({
@@ -70,14 +72,19 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const relationship = await prisma.follows.create({
+        await prisma.follows.create({
             data: {
                 followerId,
                 followingId
             }
         });
+        const followerCount = await prisma.follows.count({
+            where: {
+                followingId
+            }
+        })
 
-        return NextResponse.json(relationship, { status: 200 })
+        return NextResponse.json({ followerCount }, { status: 200 })
 
     } catch (e) {
         console.log("error in posts request of follows", e);
@@ -106,6 +113,26 @@ export async function DELETE(req: NextRequest) {
     }
 
     try {
+        await prisma.follows.delete({
+            where: {
+                followerId_followingId: {
+                    followerId,
+                    followingId
+                }
+            }
+        });
+
+        const followerCount = await prisma.follows.count({
+            where: {
+                followingId
+            }
+        })
+
+        return NextResponse.json({
+            followerCount
+        }, {
+            status: 200
+        })
 
     } catch (e) {
         console.log("error in delete request of follows", e);

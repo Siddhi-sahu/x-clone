@@ -37,6 +37,7 @@ export default function UsersProfileSection() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [user, setUser] = useState<User | null>(null);
     const [isFollowing, setIsFollowing] = useState(false);
+    const [followerCount, setFollowerCount] = useState(0);
 
 
     if (!session) {
@@ -54,10 +55,6 @@ export default function UsersProfileSection() {
         }
     }, [status, router]);
 
-
-
-
-
     useEffect(() => {
         if (userId) {
 
@@ -65,6 +62,23 @@ export default function UsersProfileSection() {
             getUserDetails(userId as string);
         }
     }, [userId]);
+
+    useEffect(() => {
+        async function fetchFollowData() {
+            try {
+
+                const res = await axios.get(`/api/follows?followerId=${sessionId}&followingId=${userId}`);
+                setIsFollowing(res.data.isFollowing);
+                setFollowerCount(res.data.followerCount);
+            } catch (e) {
+                console.log("error in follow request in useEffect", e)
+
+            }
+        }
+
+        fetchFollowData();
+
+    }, [sessionId, userId])
 
     async function getUserDetails(providerId: string) {
         try {
@@ -92,12 +106,18 @@ export default function UsersProfileSection() {
 
     }
 
-
-
-    const handleFollow = async () => {
+    const handleFollowToggle = async () => {
         try {
-            await axios.post(`/api/follows?followerId=${sessionId}&followingId=${userId}`);
-            setIsFollowing(true);
+            if (isFollowing) {
+                const res = await axios.delete(`/api/follows?followerId=${sessionId}&followingId=${userId}`);
+                setFollowerCount(res.data.followerCount);
+            }
+            else {
+
+                const res = await axios.post(`/api/follows?followerId=${sessionId}&followingId=${userId}`);
+                setFollowerCount(res.data.followerCount);
+            }
+            setIsFollowing(!isFollowing);
 
         } catch (e) {
             console.log("error here in follow:", e)
@@ -152,7 +172,7 @@ export default function UsersProfileSection() {
             <div className="flex justify-end px-4 py-3">
                 {sessionId === userId ? <button className="px-4 py-1.5 rounded-full border border-gray-600 font-bold hover:bg-gray-900 transition-colors">
                     Edit profile
-                </button> : <button onClick={handleFollow} className={`px-4 py-1.5 rounded-full border ${isFollowing ? "bg-gray-700 text-gray-200 border-gray-400" : "bg-blue-500 text-white border-gray-400 hover:bg-gray-900"} font-bold transition-colors`}>
+                </button> : <button onClick={handleFollowToggle} className={`px-4 py-1.5 rounded-full border ${isFollowing ? "bg-gray-700 text-gray-200 border-gray-400" : "bg-blue-500 text-white border-gray-400 hover:bg-gray-900"} font-bold transition-colors`}>
                     {isFollowing ? "Following" : "Follow"}
                 </button>}
 
@@ -185,7 +205,7 @@ export default function UsersProfileSection() {
                         <span className="text-gray-500">Following</span>
                     </Link>
                     <Link href="#followers" className="hover:underline">
-                        <span className="font-bold text-white">1000</span>{" "}
+                        <span className="font-bold text-white">{followerCount}</span>{" "}
                         <span className="text-gray-500">Followers</span>
                     </Link>
                 </div>
