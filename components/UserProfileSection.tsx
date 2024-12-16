@@ -92,6 +92,8 @@ export default function UsersProfileSection() {
 
     }
 
+
+
     const handleFollow = async () => {
         try {
             await axios.post(`/api/follows?followerId=${sessionId}&followingId=${userId}`);

@@ -1,7 +1,52 @@
-//follows
-
 import prisma from "@/lib/db";
+
 import { NextRequest, NextResponse } from "next/server";
+
+//get following state and whatt??
+
+export async function GET(req: NextRequest) {
+    const url = new URL(req.url);
+    const followerId = url.searchParams.get("followerId");
+    const followingId = url.searchParams.get("followingId");
+    if (!followerId || !followingId) {
+        return NextResponse.json({
+            msg: "No required ids"
+        }, {
+            status: 400
+        })
+    }
+
+    try {
+
+
+        const isFollowing = await prisma.follows.findUnique({
+            where: {
+                followerId_followingId: {
+                    followerId,
+                    followingId
+                }
+            }
+        });
+        //number
+
+        const followerCount = await prisma.follows.count({
+            where: {
+                followingId,
+            }
+        })
+
+        return NextResponse.json({ isFollowing: !!isFollowing, followerCount: followerCount })
+    } catch (e) {
+        console.log("error in get function of follows", e);
+        return NextResponse.json({
+            msg: "error"
+        })
+    }
+
+
+}
+
+//follows
 
 export async function POST(req: NextRequest) {
     const url = new URL(req.url);
@@ -24,14 +69,48 @@ export async function POST(req: NextRequest) {
         })
     }
 
-    const relationship = await prisma.follows.create({
-        data: {
-            followerId,
-            followingId
-        }
-    });
+    try {
+        const relationship = await prisma.follows.create({
+            data: {
+                followerId,
+                followingId
+            }
+        });
 
-    return NextResponse.json(relationship, { status: 200 })
+        return NextResponse.json(relationship, { status: 200 })
+
+    } catch (e) {
+        console.log("error in posts request of follows", e);
+        return NextResponse.json({
+            msg: "error"
+        });
+
+    }
+
 }
 
 //unfollow
+
+export async function DELETE(req: NextRequest) {
+    const url = new URL(req.url);
+    const followerId = url.searchParams.get("followerId");
+    const followingId = url.searchParams.get("followingId");
+
+    if (!followerId || !followingId) {
+        return NextResponse.json({
+            msg: "No required ids"
+        }, {
+            status: 400
+        })
+
+    }
+
+    try {
+
+    } catch (e) {
+        console.log("error in delete request of follows", e);
+        return NextResponse.json({
+            msg: "error"
+        });
+    }
+}
