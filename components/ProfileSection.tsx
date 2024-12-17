@@ -38,6 +38,8 @@ export default function ProfileSection() {
     // const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState<Post[]>([]);
     const [user, setUser] = useState<User | null>(null);
+    const [followers, setFollowers] = useState(0);
+    const [following, setFollowing] = useState(0);
 
 
     if (!session) {
@@ -59,6 +61,23 @@ export default function ProfileSection() {
         GetPosts(userId as string);
         getTime(userId as string);
     }, [userId]);
+
+    useEffect(() => {
+        async function getFollowData() {
+            try {
+
+                const res = await axios.get(`/api/follows/user?userId=${userId}`);
+                setFollowers(res.data.followerCount);
+                setFollowing(res.data.followingCount);
+            } catch (e) {
+                console.log("error in profile section fetching followData: ", e)
+
+            }
+        }
+
+        getFollowData();
+
+    }, [userId])
 
 
     async function GetPosts(providerId: string) {
@@ -85,7 +104,8 @@ export default function ProfileSection() {
             console.error(e)
         }
 
-    }
+    };
+
 
 
 
@@ -162,11 +182,11 @@ export default function ProfileSection() {
 
                 <div className="flex gap-4 mt-3">
                     <Link href="#following" className="hover:underline">
-                        <span className="font-bold text-white">1</span>{" "}
+                        <span className="font-bold text-white">{following}</span>{" "}
                         <span className="text-gray-500">Following</span>
                     </Link>
                     <Link href="#followers" className="hover:underline">
-                        <span className="font-bold text-white">1000</span>{" "}
+                        <span className="font-bold text-white">{followers}</span>{" "}
                         <span className="text-gray-500">Followers</span>
                     </Link>
                 </div>
