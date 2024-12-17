@@ -38,6 +38,7 @@ export default function UsersProfileSection() {
     const [user, setUser] = useState<User | null>(null);
     const [isFollowing, setIsFollowing] = useState(false);
     const [followerCount, setFollowerCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
 
 
     if (!session) {
@@ -67,9 +68,10 @@ export default function UsersProfileSection() {
         async function fetchFollowData() {
             try {
 
-                const res = await axios.get(`/api/follows?followerId=${sessionId}&followingId=${userId}`);
+                const res = await axios.get(`/api/follows?followerId=${sessionId}&followingId=${userId}&userId=${userId}`);
                 setIsFollowing(res.data.isFollowing);
                 setFollowerCount(res.data.followerCount);
+                setFollowingCount(res.data.followingCount);
             } catch (e) {
                 console.log("error in follow request in useEffect", e)
 
@@ -201,7 +203,7 @@ export default function UsersProfileSection() {
 
                 <div className="flex gap-4 mt-3">
                     <Link href="#following" className="hover:underline">
-                        <span className="font-bold text-white">1</span>{" "}
+                        <span className="font-bold text-white">{followingCount}</span>{" "}
                         <span className="text-gray-500">Following</span>
                     </Link>
                     <Link href="#followers" className="hover:underline">

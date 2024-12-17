@@ -3,11 +3,13 @@ import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 //get following state and whatt??
+//following doesnt work as session id is the followerid
 
 export async function GET(req: NextRequest) {
     const url = new URL(req.url);
-    const followerId = url.searchParams.get("followerId");
-    const followingId = url.searchParams.get("followingId");
+    const followerId = url.searchParams.get("followerId"); //sessionId
+    const followingId = url.searchParams.get("followingId"); //userId
+    const userId = url.searchParams.get("userId"); //duplicatee
     if (!followerId || !followingId) {
         return NextResponse.json({
             msg: "No required ids"
@@ -15,6 +17,14 @@ export async function GET(req: NextRequest) {
             status: 400
         })
     }
+    if (!userId) {
+        return NextResponse.json({
+            msg: "no user id for the given user"
+        }, {
+            status: 404
+        })
+    }
+    //todo return 0 for followersfollowing when retrieval fails
 
     try {
 
@@ -29,13 +39,20 @@ export async function GET(req: NextRequest) {
         });
         //number
 
+        //kaha kaha user following mein hain logo ki
         const followerCount = await prisma.follows.count({
             where: {
-                followingId,
+                followingId: userId,
             }
-        })
+        });
+        //kaha kaha user followers mein hain
+        const followingCount = await prisma.follows.count({
+            where: {
+                followerId: userId,
+            }
+        });
 
-        return NextResponse.json({ isFollowing: !!isFollowing, followerCount: followerCount }, {
+        return NextResponse.json({ isFollowing: !!isFollowing, followerCount, followingCount }, {
             status: 200
         })
     } catch (e) {
@@ -82,7 +99,12 @@ export async function POST(req: NextRequest) {
             where: {
                 followingId
             }
-        })
+        });
+        // const followingCount = await prisma.follows.count({
+        //     where: {
+        //         followerId
+        //     }
+        // })
 
         return NextResponse.json({ followerCount }, { status: 200 })
 
